@@ -1,11 +1,12 @@
 import { AppHeader } from './components/AppHeader'
+import { BookSearchForm } from './components/BookSearchForm'
 
 function App() {
   return (
     <>
       <AppHeader />
       <main>
-        <p>ここに蔵書一覧を表示していきます。</p>
+        <BookSearchForm />
       </main>
     </>
   )
