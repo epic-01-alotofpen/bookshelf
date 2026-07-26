@@ -2,11 +2,7 @@ import { useActionState } from 'react'
 import { searchBooks } from '../api/searchBooks'
 import type { Book } from '../types'
 
-type SearchState = {
-    books: Book[]
-    error: string | null
-}
-
+type SearchState = { books: Book[]; error: string | null }
 const initialState: SearchState = { books: [], error: null }
 
 export function BookSearchForm() {
@@ -25,20 +21,22 @@ export function BookSearchForm() {
     )
 
     return (
-        <section>
-            <form action={formAction}>
-                <label htmlFor="query">書籍検索</label>
-                <input id="query" name="query" type="text" />
+        <section className="card card--search">
+            <h2 className="card__title">本を探して登録</h2>
+            <p className="card__desc">Google Books から検索して蔵書に追加します。</p>
+            <form className="search-form" action={formAction}>
+                <label className="search-form__field">
+                    <span>書名・著者で検索</span>
+                    <input name="query" type="text" placeholder="例：夏目漱石" />
+                </label>
                 <button type="submit" disabled={isPending}>
                     {isPending ? '検索中…' : '検索'}
                 </button>
             </form>
-            {state.error && <p role="alert">{state.error}</p>}
-            <ul>
+            {state.error && <p className="error" role="alert">{state.error}</p>}
+            <ul className="results">
                 {state.books.map((book) => (
-                    <li key={book.id}>
-                        {book.title}（{book.authors.join(', ')}）
-                    </li>
+                    <li key={book.id}>{book.title}（{book.authors.join(', ')}）</li>
                 ))}
             </ul>
         </section>

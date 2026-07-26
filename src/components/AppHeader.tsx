@@ -1,7 +1,7 @@
 export function AppHeader() {
     return (
-        <header>
-            <h1>蔵書管理</h1>
+        <header className="app-header">
+            <h1 className="app-title">蔵書管理</h1>
         </header>
     )
 }

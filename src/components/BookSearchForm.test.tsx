@@ -6,7 +6,7 @@ test('キーワードで検索すると一致する書籍が表示される', as
     const user = userEvent.setup()
     render(<BookSearchForm />)
 
-    await user.type(screen.getByLabelText('書籍検索'), '漱石')
+    await user.type(screen.getByLabelText('書名・著者で検索'), '漱石')
     await user.click(screen.getByRole('button', { name: '検索' }))
 
     expect(await screen.findByText(/吾輩は猫である/)).toBeInTheDocument()
