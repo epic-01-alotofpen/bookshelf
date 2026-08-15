@@ -182,3 +182,19 @@
     border-right-color: var(--border);
   }
 }
+/* ── ステータス選択 ── */
+.status-select {
+  flex-shrink: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface-input);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.status-select:disabled { opacity: 0.5; cursor: default; }
+.status-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.status-select--read { color: var(--status-read); }
+.status-select--reading { color: var(--status-reading); }
+.status-select--unread { color: var(--status-unread); }

@@ -4,5 +4,6 @@ test('検索フォームに入力すると結果が表示される', async ({ pa
     await page.goto('/')
     await page.getByLabel('書名・著者で検索').fill('漱石')
     await page.getByRole('button', { name: '検索' }).click()
-    await expect(page.getByText('吾輩は猫である', { exact: false })).toBeVisible()
+    const results = page.getByRole('list', { name: '検索結果' })
+    await expect(results.getByText('吾輩は猫である', { exact: false })).toBeVisible()
 })

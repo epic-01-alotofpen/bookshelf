@@ -16,9 +16,13 @@ test('蔵書一覧が表示される', async () => {
     expect(screen.getByText(/人間失格/)).toBeInTheDocument()
 })
 
-test('各書籍に読書ステータスが表示される', async () => {
+test('各書籍に読書ステータスの選択メニューが表示される', async () => {
     await renderBookShelf()
 
-    expect(await screen.findByText('読了')).toBeInTheDocument()
-    expect(screen.getByText('読書中')).toBeInTheDocument()
+    expect(
+        await screen.findByRole('combobox', { name: '吾輩は猫であるのステータス' }),
+    ).toHaveValue('read')
+    expect(
+        screen.getByRole('combobox', { name: '人間失格のステータス' }),
+    ).toHaveValue('reading')
 })

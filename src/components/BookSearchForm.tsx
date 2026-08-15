@@ -34,7 +34,7 @@ export function BookSearchForm() {
                 </button>
             </form>
             {state.error && <p className="error" role="alert">{state.error}</p>}
-            <ul className="results">
+            <ul className="results" aria-label="検索結果">
                 {state.books.map((book) => (
                     <li key={book.id}>{book.title}（{book.authors.join(', ')}）</li>
                 ))}
