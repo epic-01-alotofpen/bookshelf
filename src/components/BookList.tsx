@@ -1,6 +1,7 @@
 import { use, useState, useOptimistic, useTransition } from 'react'
 import type { UserBook, ReadingStatus } from '../types'
 import { updateUserBookStatus } from '../api/updateUserBookStatus'
+import { BookStats } from './BookStats'
 
 type Props = { booksPromise: Promise<UserBook[]> }
 type StatusUpdate = { id: string; status: ReadingStatus }
@@ -54,6 +55,7 @@ export function BookList({ booksPromise }: Props) {
 
     return (
         <>
+            <BookStats books={optimisticBooks} />
             <div className="shelf-controls">
                 <div className="filter" role="group" aria-label="ステータスで絞り込み">
                     {FILTERS.map((f) => (
