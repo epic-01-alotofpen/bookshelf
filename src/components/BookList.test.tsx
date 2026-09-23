@@ -1,36 +1,33 @@
-import { render, screen, act, waitFor } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BookShelf } from './BookShelf'
 
 async function renderShelf() {
-    await act(async () => {
-        render(<BookShelf />)
-    })
+    await act(async () => { render(<BookShelf />) })
     await screen.findByText(/吾輩は猫である/)
 }
 
-test('ステータスを変更すると選択が反映される', async () => {
-    const user = userEvent.setup()
+test('初期表示で全件数が表示される', async () => {
     await renderShelf()
-
-    const select = screen.getByRole('combobox', { name: '人間失格のステータス' })
-    expect(select).toHaveValue('reading')
-
-    await user.selectOptions(select, 'read')
-
-    await waitFor(() => expect(select).toHaveValue('read'))
+    expect(screen.getByText('全2件')).toBeInTheDocument()
 })
 
-test('変更は他の本に影響しない', async () => {
+test('ステータスで絞り込むと該当書籍だけ表示される', async () => {
     const user = userEvent.setup()
     await renderShelf()
 
-    const target = screen.getByRole('combobox', { name: '人間失格のステータス' })
-    const other = screen.getByRole('combobox', { name: '吾輩は猫であるのステータス' })
+    await user.click(screen.getByRole('button', { name: '読了' }))
 
-    // 異なる値に変更し、他方が元の値を保つことを確認する
-    await user.selectOptions(target, 'unread')
-    await waitFor(() => expect(target).toHaveValue('unread'))
+    expect(screen.getByText(/吾輩は猫である/)).toBeInTheDocument()
+    expect(screen.queryByText(/人間失格/)).not.toBeInTheDocument()
+    expect(screen.getByText('1件表示 / 全2件')).toBeInTheDocument()
+})
 
-    expect(other).toHaveValue('read')
+test('該当がない絞り込みではメッセージを表示する', async () => {
+    const user = userEvent.setup()
+    await renderShelf()
+
+    await user.click(screen.getByRole('button', { name: '未読' }))
+
+    expect(screen.getByText('条件に合う本がありません。')).toBeInTheDocument()
 })

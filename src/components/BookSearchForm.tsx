@@ -2,19 +2,19 @@ import { useActionState } from 'react'
 import { searchBooks } from '../api/searchBooks'
 import type { Book } from '../types'
 
-type SearchState = { books: Book[]; error: string | null }
-const initialState: SearchState = { books: [], error: null }
+type SearchState = { books: Book[]; error: string | null; searched: boolean }
+const initialState: SearchState = { books: [], error: null, searched: false }
 
 export function BookSearchForm() {
     const [state, formAction, isPending] = useActionState(
         async (_prev: SearchState, formData: FormData): Promise<SearchState> => {
             const query = String(formData.get('query') ?? '').trim()
-            if (!query) return { books: [], error: 'キーワードを入力してください' }
+            if (!query) return { books: [], error: 'キーワードを入力してください', searched: false }
             try {
                 const books = await searchBooks(query)
-                return { books, error: null }
+                return { books, error: null, searched: true }
             } catch {
-                return { books: [], error: '検索に失敗しました' }
+                return { books: [], error: '検索に失敗しました', searched: false }
             }
         },
         initialState,
@@ -34,11 +34,20 @@ export function BookSearchForm() {
                 </button>
             </form>
             {state.error && <p className="error" role="alert">{state.error}</p>}
-            <ul className="results" aria-label="検索結果">
-                {state.books.map((book) => (
-                    <li key={book.id}>{book.title}（{book.authors.join(', ')}）</li>
-                ))}
-            </ul>
+            {state.searched && (
+                <p className="results-count">
+                    {state.books.length > 0
+                        ? `${state.books.length}件見つかりました`
+                        : '該当する本がありません'}
+                </p>
+            )}
+            {state.books.length > 0 && (
+                <ul className="results" aria-label="検索結果">
+                    {state.books.map((book) => (
+                        <li key={book.id}>{book.title}（{book.authors.join(', ')}）</li>
+                    ))}
+                </ul>
+            )}
         </section>
     )
 }
